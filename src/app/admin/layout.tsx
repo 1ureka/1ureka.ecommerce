@@ -13,3 +13,5 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     </>
   );
 }
+
+export const dynamic = "force-dynamic";
