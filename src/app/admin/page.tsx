@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getSalesData, getCustomerData, getProductData } from "../data/table";
+import { getSalesData, getCustomerData, getProductData } from "@/data/table";
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 
 export default async function AdminPage() {
