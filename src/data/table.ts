@@ -62,6 +62,31 @@ export async function getProduct(id: string) {
   return db.product.findUnique({ where: { id } });
 }
 
+export async function getProducts(
+  type: "popular" | "newest" | "all",
+  take?: number
+) {
+  switch (type) {
+    case "popular":
+      return db.product.findMany({
+        where: { isAvailableForPurchase: true },
+        orderBy: { orders: { _count: "desc" } },
+        take: take ?? 6,
+      });
+    case "newest":
+      return db.product.findMany({
+        where: { isAvailableForPurchase: true },
+        orderBy: { createdAt: "desc" },
+        take: take ?? 6,
+      });
+    case "all":
+      return db.product.findMany({
+        where: { isAvailableForPurchase: true },
+        orderBy: { name: "asc" },
+      });
+  }
+}
+
 export async function createProduct(
   data: Pick<Product, "name" | "priceInCents" | "description"> & {
     file: File;
@@ -97,10 +122,46 @@ export async function createProduct(
   }
 }
 
-export async function updateProduct(id: string, data: Partial<Product>) {
+export async function updateProduct(
+  id: string,
+  data: Partial<Product> & { file?: File; image?: File }
+) {
+  const product = await getProduct(id);
+
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  let filePath = product.filePath;
+  let imagePath = product.imagePath;
+  try {
+    if (data.file && data.file.size > 0) {
+      await fs.unlink(product.filePath);
+      filePath = `private/products/${crypto.randomUUID()}-${data.file.name}`;
+      await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
+    }
+
+    if (data.image && data.image.size > 0) {
+      await fs.unlink(`public/${product.imagePath}`);
+      imagePath = `products/${crypto.randomUUID()}-${data.image.name}`;
+      await fs.writeFile(
+        `public/${imagePath}`,
+        Buffer.from(await data.image.arrayBuffer())
+      );
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    }
+    throw new Error("Something went wrong");
+  }
+
+  delete data.file;
+  delete data.image;
+
   return db.product.update({
     where: { id },
-    data,
+    data: { ...data, filePath, imagePath },
   });
 }
 
