@@ -87,6 +87,13 @@ export async function getProducts(
   }
 }
 
+export async function getDownload(id: string) {
+  return db.downloadVerification.findUnique({
+    where: { id, expiresAt: { gt: new Date() } },
+    select: { product: { select: { filePath: true, name: true } } },
+  });
+}
+
 export async function createProduct(
   data: Pick<Product, "name" | "priceInCents" | "description"> & {
     file: File;
