@@ -177,3 +177,20 @@ export async function removeProduct(id: string) {
 
   return data;
 }
+
+export async function checkOrder(email: string, productId: string) {
+  const data = await db.order.findFirst({
+    where: { user: { email }, productId },
+    select: { id: true },
+  });
+
+  return !!data;
+}
+
+export async function createDownloadId(productId: string) {
+  const data = await db.downloadVerification.create({
+    data: { productId, expiresAt: new Date(Date.now() + 1000 * 60 * 5) },
+  });
+
+  return data.id;
+}

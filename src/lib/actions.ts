@@ -1,10 +1,16 @@
 "use server";
 
-import { createProduct, removeProduct, updateProduct } from "@/data/table";
+import {
+  checkOrder,
+  createProduct,
+  removeProduct,
+  updateProduct,
+} from "@/data/table";
 import { notFound, redirect } from "next/navigation";
 import { ProductSchema, ProductEditSchema } from "@/lib/schema";
+import { revalidatePath } from "next/cache";
 
-// Product
+// Product actions
 export async function addProduct(prevState: unknown, formData: FormData) {
   try {
     const result = ProductSchema.safeParse(
@@ -29,6 +35,8 @@ export async function addProduct(prevState: unknown, formData: FormData) {
     }
   }
 
+  revalidatePath("/");
+  revalidatePath("/products");
   redirect("/admin/products");
 }
 
@@ -41,6 +49,9 @@ export async function toggleAvailability(
   } catch (error) {
     throw new Error("Something went wrong");
   }
+
+  revalidatePath("/");
+  revalidatePath("/products");
 }
 
 export async function deleteProduct(id: string) {
@@ -51,6 +62,9 @@ export async function deleteProduct(id: string) {
   } catch (error) {
     throw new Error("Something went wrong");
   }
+
+  revalidatePath("/");
+  revalidatePath("/products");
 }
 
 export async function editProduct(
@@ -80,7 +94,12 @@ export async function editProduct(
     }
   }
 
+  revalidatePath("/");
+  revalidatePath("/products");
   redirect("/admin/products");
 }
 
-// Other actions
+// Order actions
+export async function userOrderExists(email: string, productId: string) {
+  return checkOrder(email, productId);
+}
