@@ -6,44 +6,107 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { formatCurrency } from "@/lib/formatters";
 import { useState } from "react";
+import { addProduct } from "../../_actions/product";
+import { useFormState, useFormStatus } from "react-dom";
+import type { Product } from "@prisma/client";
+import Image from "next/image";
 
-export default function ProductForm() {
-  const [price, setPrice] = useState<number>();
+export default function ProductForm({ product }: { product?: Product | null }) {
+  const [formState, action] = useFormState(addProduct, {
+    error: "",
+    fieldError: {},
+  });
+  const [price, setPrice] = useState<number | undefined>(product?.priceInCents);
 
   return (
-    <form className="space-y-8">
+    <form action={action} className="space-y-8">
+      {formState.error && (
+        <div className="text-destructive">{formState.error}</div>
+      )}
       <div className="space-y-2">
         <Label htmlFor="name">Name</Label>
-        <Input type="text" id="name" name="name" required />
+        <Input
+          type="text"
+          id="name"
+          name="name"
+          required
+          defaultValue={product?.name}
+        />
+        {formState?.fieldError?.name && (
+          <div className="text-destructive">{formState.fieldError.name}</div>
+        )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="price">Price In Cent</Label>
+        <Label htmlFor="priceInCents">Price In Cent</Label>
         <Input
           type="number"
-          id="price"
-          name="price"
+          id="priceInCents"
+          name="priceInCents"
           required
           value={price}
           onChange={(e) => setPrice(Number(e.target.value) || undefined)}
+          defaultValue={product?.priceInCents}
         />
+        {formState?.fieldError?.priceInCents && (
+          <div className="text-destructive">
+            {formState.fieldError.priceInCents}
+          </div>
+        )}
       </div>
       <div className="text-muted-foreground">
         Price: {formatCurrency((price || 0) / 100)}
       </div>
       <div className="space-y-2">
         <Label htmlFor="description">Description</Label>
-        <Textarea id="description" name="description" required />
+        <Textarea
+          id="description"
+          name="description"
+          required
+          defaultValue={product?.description}
+        />
+        {formState?.fieldError?.description && (
+          <div className="text-destructive">
+            {formState.fieldError.description}
+          </div>
+        )}
       </div>
       <div className="space-y-2">
         <Label htmlFor="file">File</Label>
-        <Input type="file" id="file" name="file" required />
+        <Input type="file" id="file" name="file" required={!product} />
+        {!!product && (
+          <div className="text-muted-foreground">{product.filePath}</div>
+        )}
+        {formState?.fieldError?.file && (
+          <div className="text-destructive">{formState.fieldError.file}</div>
+        )}
       </div>
       <div className="space-y-2">
         <Label htmlFor="image">Image</Label>
-        <Input type="file" id="image" name="image" required />
+        <Input type="file" id="image" name="image" required={!product} />
+        {!!product && (
+          <Image
+            src={`/${product.imagePath}`}
+            alt={product.name}
+            height={400}
+            width={400}
+          />
+        )}
+        {formState?.fieldError?.image && (
+          <div className="text-destructive">{formState.fieldError.image}</div>
+        )}
       </div>
 
-      <Button type="submit">Save</Button>
+      <SubmitButton />
     </form>
+  );
+}
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <Button type="submit" className="w-full" disabled={pending}>
+      {pending ? "Saving..." : "Save"}
+    </Button>
   );
 }
