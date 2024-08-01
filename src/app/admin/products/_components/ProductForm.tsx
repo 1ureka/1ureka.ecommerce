@@ -1,21 +1,26 @@
 "use client";
 
+import { useState } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import type { Product } from "@prisma/client";
+
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+
 import { formatCurrency } from "@/lib/formatters";
-import { useState } from "react";
-import { addProduct } from "../../_actions/product";
-import { useFormState, useFormStatus } from "react-dom";
-import type { Product } from "@prisma/client";
-import Image from "next/image";
+import { addProduct, editProduct } from "@/lib/actions";
 
 export default function ProductForm({ product }: { product?: Product | null }) {
-  const [formState, action] = useFormState(addProduct, {
-    error: "",
-    fieldError: {},
-  });
+  const [formState, action] = useFormState(
+    !product ? addProduct : editProduct.bind(null, product.id),
+    {
+      error: "",
+      fieldError: {},
+    }
+  );
   const [price, setPrice] = useState<number | undefined>(product?.priceInCents);
 
   return (
@@ -45,7 +50,6 @@ export default function ProductForm({ product }: { product?: Product | null }) {
           required
           value={price}
           onChange={(e) => setPrice(Number(e.target.value) || undefined)}
-          defaultValue={product?.priceInCents}
         />
         {formState?.fieldError?.priceInCents && (
           <div className="text-destructive">
