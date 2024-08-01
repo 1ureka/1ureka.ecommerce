@@ -1,22 +1,28 @@
 import ProductCard, { ProductCardSkeleton } from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { getProducts } from "@/data/table";
+import { cache } from "@/lib/cache";
 import type { Product } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 
+const popularFetcher = cache(
+  () => getProducts("popular", 6),
+  ["/", "getProducts", "popular"],
+  { revalidate: 60 * 60 }
+);
+const newestFetcher = cache(
+  () => getProducts("newest", 6),
+  ["/", "getProducts", "newest"],
+  { revalidate: 60 * 60 }
+);
+
 export default async function Home() {
   return (
     <main className="space-y-12">
-      <ProductGridSection
-        title="Most Popular"
-        fetcher={() => getProducts("popular")}
-      />
-      <ProductGridSection
-        title="Newest Products"
-        fetcher={() => getProducts("newest")}
-      />
+      <ProductGridSection title="Most Popular" fetcher={popularFetcher} />
+      <ProductGridSection title="Newest Products" fetcher={newestFetcher} />
     </main>
   );
 }
