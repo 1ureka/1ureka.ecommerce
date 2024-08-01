@@ -1,38 +1,10 @@
 "use server";
 
-import {
-  createProduct,
-  getProduct,
-  removeProduct,
-  updateProduct,
-} from "@/data/table";
+import { createProduct, removeProduct, updateProduct } from "@/data/table";
 import { notFound, redirect } from "next/navigation";
-import { z } from "zod";
+import { ProductSchema, ProductEditSchema } from "@/lib/schema";
 
-const fileSchema = z.instanceof(File, { message: "File is required" });
-
-const imageSchema = fileSchema.refine(
-  (file) => file.type.startsWith("image/"),
-  { message: "Image must be an image" }
-);
-
-const ProductSchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(1),
-  priceInCents: z.coerce.number().int().positive().min(1),
-  file: fileSchema.refine((file) => file.size > 0, {
-    message: "File is required",
-  }),
-  image: imageSchema.refine((file) => file.size > 0, {
-    message: "Image is required",
-  }),
-});
-
-const ProductEditSchema = ProductSchema.extend({
-  file: fileSchema.optional(),
-  image: imageSchema.optional(),
-});
-
+// Product
 export async function addProduct(prevState: unknown, formData: FormData) {
   try {
     const result = ProductSchema.safeParse(
@@ -99,19 +71,7 @@ export async function editProduct(
     }
 
     const data = result.data;
-    const product = await getProduct(id);
-
-    if (!product) return notFound();
-
-    if (data.file && data.file.size > 0) {
-      // delete old file
-    }
-
-    if (data.image && data.image.size > 0) {
-      // delete old image
-    }
-
-    // await updateProduct(id, {});
+    await updateProduct(id, data);
   } catch (error) {
     if (error instanceof Error) {
       return { error: error.message };
@@ -122,3 +82,5 @@ export async function editProduct(
 
   redirect("/admin/products");
 }
+
+// Other actions
