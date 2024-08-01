@@ -4,10 +4,21 @@ import Link from "next/link";
 import {
   Table,
   TableBody,
+  TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getProductTable } from "@/data/table";
+import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import ProductActions from "./_components/ProductActions";
 
 export default function AdminProductsPage() {
   return (
@@ -23,7 +34,9 @@ export default function AdminProductsPage() {
   );
 }
 
-function ProductTable() {
+async function ProductTable() {
+  const products = await getProductTable();
+
   return (
     <Table>
       <TableHeader>
@@ -39,7 +52,59 @@ function ProductTable() {
           </TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody></TableBody>
+      <TableBody>
+        {products.map(
+          ({ id, name, priceInCents, orders, isAvailableForPurchase }) => (
+            <TableRow key={id}>
+              <TableCell>
+                {isAvailableForPurchase ? (
+                  <>
+                    <CheckCircle2 />
+                    <span className="sr-only">Available</span>
+                  </>
+                ) : (
+                  <>
+                    <XCircle className="stroke-destructive" />
+                    <span className="sr-only">Not Available</span>
+                  </>
+                )}
+              </TableCell>
+              <TableCell>{name}</TableCell>
+              <TableCell>{formatCurrency(priceInCents / 100)}</TableCell>
+              <TableCell>{formatNumber(orders)}</TableCell>
+              <TableCell>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <MoreVertical />
+                    <span className="sr-only">Actions</span>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent>
+                    <DropdownMenuItem asChild>
+                      <a download href={`/admin/products/${id}/download`}>
+                        Download
+                      </a>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href={`/admin/products/${id}/edit`}>Edit</Link>
+                    </DropdownMenuItem>
+                    <ProductActions
+                      id={id}
+                      isAvailableForPurchase={isAvailableForPurchase}
+                      disabled={orders > 0}
+                    />
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </TableCell>
+            </TableRow>
+          )
+        )}
+      </TableBody>
+      {products.length === 0 && (
+        <caption className="text-center text-sm text-muted-foreground">
+          No products found
+        </caption>
+      )}
     </Table>
   );
 }
