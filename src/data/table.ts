@@ -201,3 +201,25 @@ export async function createDownloadId(productId: string) {
 
   return data.id;
 }
+
+export async function upsertUserAndOrder(
+  email: string,
+  productId: string,
+  priceInCents: number
+) {
+  const userFields = {
+    email,
+    orders: {
+      create: { productId, pricePaidInCents: priceInCents },
+    },
+  };
+
+  const data = await db.user.upsert({
+    where: { email },
+    create: userFields,
+    update: userFields,
+    select: { orders: { orderBy: { createdAt: "desc" }, take: 1 } },
+  });
+
+  return data.orders[0];
+}
