@@ -94,6 +94,29 @@ export async function getDownload(id: string) {
   });
 }
 
+export async function getUsers() {
+  return db.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      orders: { select: { pricePaidInCents: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
+export async function getOrders() {
+  return db.order.findMany({
+    select: {
+      id: true,
+      pricePaidInCents: true,
+      product: { select: { name: true } },
+      user: { select: { email: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 export async function createProduct(
   data: Pick<Product, "name" | "priceInCents" | "description"> & {
     file: File;
@@ -183,6 +206,14 @@ export async function removeProduct(id: string) {
   }
 
   return data;
+}
+
+export async function removeUser(id: string) {
+  return db.user.delete({ where: { id } });
+}
+
+export async function removeOrder(id: string) {
+  return db.order.delete({ where: { id } });
 }
 
 export async function checkOrder(email: string, productId: string) {

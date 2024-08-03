@@ -3,7 +3,9 @@
 import {
   checkOrder,
   createProduct,
+  removeOrder,
   removeProduct,
+  removeUser,
   updateProduct,
 } from "@/data/table";
 import { notFound, redirect } from "next/navigation";
@@ -102,4 +104,21 @@ export async function editProduct(
 // Order actions
 export async function userOrderExists(email: string, productId: string) {
   return checkOrder(email, productId);
+}
+
+export async function deleteOrder(id: string) {
+  const order = await removeOrder(id);
+
+  if (!order) return notFound();
+
+  return order;
+}
+
+// User actions
+export async function deleteUser(id: string) {
+  const user = await removeUser(id);
+
+  if (!user) return notFound();
+
+  return user;
 }
