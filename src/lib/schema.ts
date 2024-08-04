@@ -23,3 +23,5 @@ export const ProductEditSchema = ProductSchema.extend({
   file: fileSchema.optional(),
   image: imageSchema.optional(),
 });
+
+export const EmailSchema = z.string().email();
