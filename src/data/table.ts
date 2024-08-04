@@ -105,6 +105,16 @@ export async function getUsers() {
   });
 }
 
+export async function getUserOrders(email: string) {
+  return db.user.findUnique({
+    where: { email },
+    select: {
+      email: true,
+      orders: { include: { product: true } },
+    },
+  });
+}
+
 export async function getOrders() {
   return db.order.findMany({
     select: {
