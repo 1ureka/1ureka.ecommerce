@@ -2,15 +2,21 @@
 
 import {
   checkOrder,
+  createDownloadId,
   createProduct,
+  getUserOrders,
   removeOrder,
   removeProduct,
   removeUser,
   updateProduct,
 } from "@/data/table";
 import { notFound, redirect } from "next/navigation";
-import { ProductSchema, ProductEditSchema } from "@/lib/schema";
+import { ProductSchema, ProductEditSchema, EmailSchema } from "@/lib/schema";
 import { revalidatePath } from "next/cache";
+import { Resend } from "resend";
+import OrderHistoryEmail from "@/email/OrderHistory";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Product actions
 export async function addProduct(prevState: unknown, formData: FormData) {
@@ -112,6 +118,51 @@ export async function deleteOrder(id: string) {
   if (!order) return notFound();
 
   return order;
+}
+
+export async function sendOrdersHistory(
+  prevState: unknown,
+  formData: FormData
+): Promise<{ message?: string; error?: string }> {
+  const result = EmailSchema.safeParse(formData.get("email"));
+
+  if (!result.success) {
+    return { error: "Invalid Email address" };
+  }
+
+  const email = result.data;
+  const orderHistory = await getUserOrders(email);
+
+  if (!orderHistory) {
+    return {
+      message:
+        "Check your email to view your order history and download your products.",
+    };
+  }
+
+  const history = await Promise.all(
+    orderHistory.orders.map(async (data) => {
+      const { product, ...order } = data;
+      const downloadId = await createDownloadId(product.id);
+      return { order, product, downloadId };
+    })
+  );
+
+  const data = await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: "summerheadquarters001@gmail.com",
+    subject: "Your Order History from 1ureka.ecommerce",
+    react: <OrderHistoryEmail email={email} history={history} />,
+  });
+
+  if (data.error) {
+    return { error: "There was an error sending the email" };
+  }
+
+  return {
+    message:
+      "Check your email to view your order history and download your products.",
+  };
 }
 
 // User actions
