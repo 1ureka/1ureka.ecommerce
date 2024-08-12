@@ -1,5 +1,5 @@
-import PageHeader from "../../_components/PageHeader";
-import ProductForm from "../_components/ProductForm";
+import PageHeader from "@/components/(admin)/PageHeader";
+import ProductForm from "@/components/(admin)/ProductForm";
 
 export default function AdminProductsNewPage() {
   return (

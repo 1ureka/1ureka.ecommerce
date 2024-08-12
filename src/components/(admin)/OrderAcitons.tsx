@@ -13,20 +13,10 @@ export default function OrderActions({
   id: string;
   disabled?: boolean;
 }) {
-  return (
-    <>
-      <DeleteButton id={id} disabled={disabled} />
-    </>
-  );
+  return <DeleteButton id={id} disabled={disabled} />;
 }
 
-export function DeleteButton({
-  id,
-  disabled,
-}: {
-  id: string;
-  disabled?: boolean;
-}) {
+function DeleteButton({ id, disabled }: { id: string; disabled?: boolean }) {
   const [isPedding, startTransition] = useTransition();
   const router = useRouter();
 

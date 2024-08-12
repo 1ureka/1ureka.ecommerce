@@ -1,27 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
+
 import { userOrderExists } from "@/lib/actions";
 import { formatCurrency } from "@/lib/formatters";
 import type { Product } from "@prisma/client";
-import {
-  Elements,
-  LinkAuthenticationElement,
-  PaymentElement,
-  useElements,
-  useStripe,
-} from "@stripe/react-stripe-js";
+
 import { loadStripe } from "@stripe/stripe-js";
-import Image from "next/image";
+import { useElements, useStripe } from "@stripe/react-stripe-js";
+import { Elements, PaymentElement } from "@stripe/react-stripe-js";
+import { LinkAuthenticationElement } from "@stripe/react-stripe-js";
+
 import { useState } from "react";
+import Image from "next/image";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string

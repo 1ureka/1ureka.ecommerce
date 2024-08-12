@@ -1,11 +1,15 @@
-import ProductCard, { ProductCardSkeleton } from "@/components/ProductCard";
+import ProductCard, {
+  ProductCardSkeleton,
+} from "@/components/(user)/ProductCard";
 import { Button } from "@/components/ui/button";
-import { getProducts } from "@/data/table";
-import { cache } from "@/lib/cache";
-import type { Product } from "@prisma/client";
 import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+
 import { Suspense } from "react";
+import { cache } from "@/lib/cache";
+import Link from "next/link";
+
+import { getProducts } from "@/data/table";
+import type { Product } from "@prisma/client";
 
 const popularFetcher = cache(
   () => getProducts("popular", 6),

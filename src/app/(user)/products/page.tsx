@@ -1,8 +1,12 @@
-import ProductCard, { ProductCardSkeleton } from "@/components/ProductCard";
-import { getProducts } from "@/data/table";
-import { cache } from "@/lib/cache";
-import type { Product } from "@prisma/client";
+import ProductCard, {
+  ProductCardSkeleton,
+} from "@/components/(user)/ProductCard";
+
 import { Suspense } from "react";
+import { cache } from "@/lib/cache";
+
+import { getProducts } from "@/data/table";
+import type { Product } from "@prisma/client";
 
 const productsFetcher = cache(
   () => getProducts("all"),

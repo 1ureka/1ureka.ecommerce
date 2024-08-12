@@ -1,11 +1,11 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+
 import { DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-
 import { deleteProduct, toggleAvailability } from "@/lib/actions";
-import { useRouter } from "next/navigation";
 
 export default function ProductActions({
   id,

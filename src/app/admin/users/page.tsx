@@ -1,21 +1,16 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import PageHeader from "../_components/PageHeader";
 import { formatCurrency, formatNumber } from "@/lib/formatters";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
+import { Table, TableBody, TableCell } from "@/components/ui/table";
+import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+
+import PageHeader from "@/components/(admin)/PageHeader";
+import UserActions from "@/components/(admin)/UserActions";
+
 import { MoreVertical } from "lucide-react";
 import { getUsers } from "@/data/table";
-import UserActions from "./_components/UserActions";
 
 export default function UsersPage() {
   return (

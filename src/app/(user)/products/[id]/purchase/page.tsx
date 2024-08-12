@@ -1,7 +1,7 @@
 import { getProduct } from "@/data/table";
 import { notFound } from "next/navigation";
 import Stripe from "stripe";
-import CheckoutForm from "./_components/CheckoutForm";
+import CheckoutForm from "@/components/(user)/CheckoutForm";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
