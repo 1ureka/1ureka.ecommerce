@@ -97,6 +97,12 @@ export async function getDownload(id: string) {
   });
 }
 
+export async function getExpiredDownloads() {
+  return db.downloadVerification.count({
+    where: { expiresAt: { lt: new Date() } },
+  });
+}
+
 export async function getUsers() {
   return db.user.findMany({
     select: {
@@ -227,6 +233,12 @@ export async function removeUser(id: string) {
 
 export async function removeOrder(id: string) {
   return db.order.delete({ where: { id } });
+}
+
+export async function removeExpiredDownloads() {
+  return db.downloadVerification.deleteMany({
+    where: { expiresAt: { lt: new Date() } },
+  });
 }
 
 export async function checkOrder(email: string, productId: string) {
