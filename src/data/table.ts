@@ -71,18 +71,21 @@ export async function getProducts(
       return db.product.findMany({
         where: { isAvailableForPurchase: true },
         orderBy: { orders: { _count: "desc" } },
-        take: take ?? 6,
+        include: { orders: true },
+        take: take ?? 5,
       });
     case "newest":
       return db.product.findMany({
         where: { isAvailableForPurchase: true },
         orderBy: { createdAt: "desc" },
-        take: take ?? 6,
+        include: { orders: true },
+        take: take ?? 5,
       });
     case "all":
       return db.product.findMany({
         where: { isAvailableForPurchase: true },
         orderBy: { name: "asc" },
+        include: { orders: true },
       });
   }
 }
