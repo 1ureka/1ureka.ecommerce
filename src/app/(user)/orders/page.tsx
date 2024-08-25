@@ -1,54 +1,60 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import Block from "@/components/Block";
 import { sendOrdersHistory } from "@/lib/actions";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useFormState, useFormStatus } from "react-dom";
 
 export default function OrdersPage() {
   const [data, action] = useFormState(sendOrdersHistory, {});
 
   return (
-    <form className="max-w-xl mx-auto" action={action}>
-      <Card>
-        <CardHeader>
-          <CardTitle>My Orders</CardTitle>
-          <CardDescription>
+    <Stack
+      gap={3}
+      alignItems="center"
+      sx={{ alignSelf: "center", justifySelf: "center", width: "fit-content" }}
+    >
+      <Block sx={{ width: 1 }}>
+        <Stack gap={1}>
+          <Typography variant="h5">My Orders</Typography>
+          <Typography variant="body2">
             Enter your email and we will email you your order history and
             download links.
-          </CardDescription>
-        </CardHeader>
+          </Typography>
+        </Stack>
+      </Block>
 
-        <CardContent>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input type="email" required name="email" id="email" />
+      <Block sx={{ width: 1 }}>
+        <form action={action}>
+          <Stack gap={1}>
+            <Typography variant="subtitle1">
+              Enter the email you used to purchase:
+            </Typography>
+
+            <TextField
+              type="email"
+              required
+              label="email"
+              name="email"
+              variant="filled"
+              error={!!data.error}
+              size="small"
+            />
+
             {data.message && (
-              <p className="text-sm text-green-700">
+              <Typography color="success.main">
                 {"📧 "}
                 {data.message}
-              </p>
+              </Typography>
             )}
-            {data.error && (
-              <p className="text-sm text-destructive">{data.error}</p>
-            )}
-          </div>
-        </CardContent>
 
-        <CardFooter>
-          <SubmitButton disabled={!!data.message} />
-        </CardFooter>
-      </Card>
-    </form>
+            {data.error && <Typography color="error">{data.error}</Typography>}
+
+            <SubmitButton disabled={!!data.message} />
+          </Stack>
+        </form>
+      </Block>
+    </Stack>
   );
 }
 
@@ -58,9 +64,10 @@ function SubmitButton({ disabled }: { disabled?: boolean }) {
   return (
     <Button
       disabled={pending || disabled}
-      className="w-full"
-      size="lg"
+      sx={{ width: 1, mt: 1.5 }}
+      size="large"
       type="submit"
+      variant="contained"
     >
       {pending ? "Loading..." : "Submit"}
     </Button>
