@@ -3,11 +3,15 @@
 import { usePathname } from "next/navigation";
 import { Children, cloneElement } from "react";
 
-const specialPaths = ["/", "/gallery/scene", "/gallery/props"];
+const specialPaths = ["/", "/admin", "/admin/*"];
 
 function isActive(href: string, pathname: string) {
-  if (specialPaths.includes(href)) {
+  if (href === "/" || href === "/admin") {
     return pathname === href;
+  }
+
+  if (href.startsWith("/admin")) {
+    return pathname.split("/")[2] === href.split("/")[2];
   }
 
   return pathname.split("/")[1] === href.split("/")[1];
