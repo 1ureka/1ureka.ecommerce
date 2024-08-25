@@ -1,106 +1,97 @@
 import { formatCurrency, formatNumber } from "@/lib/formatters";
+import { getProductTable } from "@/data/table";
+
 import Link from "next/link";
+import { Box, Button, Stack, Typography, Table } from "@mui/material";
+import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
-import { Button } from "@/components/ui/button";
-import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Table, TableBody, TableCell } from "@/components/ui/table";
-
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
-import PageHeader from "@/components/(admin)/PageHeader";
+import Block from "@/components/Block";
 import ProductActions from "@/components/(admin)/ProductActions";
 
-import { getProductTable } from "@/data/table";
-import { CheckCircle2, MoreVertical, XCircle } from "lucide-react";
-
-export default function AdminProductsPage() {
+export default function Page() {
   return (
-    <>
-      <div className="flex justify-between gap-4">
-        <PageHeader>Products</PageHeader>
-        <Button asChild>
-          <Link href="/admin/products/new">Add Product</Link>
+    <Stack gap={3}>
+      <Block
+        variant="contained"
+        color="primary.main"
+        sx={{ minWidth: 300, width: "fit-content", alignSelf: "center" }}
+        SlotProps={{
+          childContainer: {
+            "data-mui-color-scheme": "dark",
+            sx: { color: "text.primary", textAlign: "center" },
+          },
+        }}
+      >
+        <Typography variant="h5" sx={{ mb: 1 }}>
+          Products
+        </Typography>
+        <Button
+          component={Link}
+          href="/admin/products/new"
+          variant="outlined"
+          color="inherit"
+        >
+          Add Product
         </Button>
-      </div>
-      <ProductTable />
-    </>
+      </Block>
+
+      <Block>
+        <ProductTable />
+      </Block>
+    </Stack>
   );
 }
 
 async function ProductTable() {
   const products = await getProductTable();
 
+  if (products.length === 0) return <p>No products found</p>;
+
   return (
     <Table>
-      <TableHeader>
+      <TableHead>
         <TableRow>
-          <TableHead className="w-0">
-            <span className="sr-only">Avaliable For Purchase</span>
-          </TableHead>
-          <TableHead>Name</TableHead>
-          <TableHead>Price</TableHead>
-          <TableHead>Orders</TableHead>
-          <TableHead className="w-0">
-            <span className="sr-only">Action</span>
-          </TableHead>
+          <TableCell padding="checkbox" align="left" />
+          <TableCell>Name</TableCell>
+          <TableCell>Price</TableCell>
+          <TableCell>Orders</TableCell>
+          <TableCell padding="checkbox" align="right" />
         </TableRow>
-      </TableHeader>
+      </TableHead>
+
       <TableBody>
         {products.map(
           ({ id, name, priceInCents, orders, isAvailableForPurchase }) => (
             <TableRow key={id}>
-              <TableCell>
-                {isAvailableForPurchase ? (
-                  <>
-                    <CheckCircle2 />
-                    <span className="sr-only">Available</span>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="stroke-destructive" />
-                    <span className="sr-only">Not Available</span>
-                  </>
-                )}
+              <TableCell
+                padding="checkbox"
+                align="left"
+                sx={{ color: "text.secondary" }}
+              >
+                <Box sx={{ display: "grid", placeItems: "center" }}>
+                  {isAvailableForPurchase ? (
+                    <CheckCircleRoundedIcon color="secondary" />
+                  ) : (
+                    <CancelRoundedIcon color="warning" />
+                  )}
+                </Box>
               </TableCell>
               <TableCell>{name}</TableCell>
               <TableCell>{formatCurrency(priceInCents / 100)}</TableCell>
               <TableCell>{formatNumber(orders)}</TableCell>
-              <TableCell>
-                <DropdownMenu>
-                  <DropdownMenuTrigger>
-                    <MoreVertical />
-                    <span className="sr-only">Actions</span>
-                  </DropdownMenuTrigger>
-
-                  <DropdownMenuContent>
-                    <DropdownMenuItem asChild>
-                      <a download href={`/admin/products/${id}/download`}>
-                        Download
-                      </a>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href={`/admin/products/${id}/edit`}>Edit</Link>
-                    </DropdownMenuItem>
-                    <ProductActions
-                      id={id}
-                      isAvailableForPurchase={isAvailableForPurchase}
-                      disabled={orders > 0}
-                    />
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <TableCell padding="checkbox" align="right">
+                <ProductActions
+                  id={id}
+                  isAvailableForPurchase={isAvailableForPurchase}
+                  disabled={orders > 0}
+                />
               </TableCell>
             </TableRow>
           )
         )}
       </TableBody>
-      {products.length === 0 && (
-        <caption className="text-center text-sm text-muted-foreground">
-          No products found
-        </caption>
-      )}
     </Table>
   );
 }

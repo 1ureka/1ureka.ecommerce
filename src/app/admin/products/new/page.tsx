@@ -1,11 +1,27 @@
-import PageHeader from "@/components/(admin)/PageHeader";
+import { Stack, Typography } from "@mui/material";
+import Block from "@/components/Block";
 import ProductForm from "@/components/(admin)/ProductForm";
 
-export default function AdminProductsNewPage() {
+export default function Page() {
   return (
-    <>
-      <PageHeader>Add Product</PageHeader>
-      <ProductForm />
-    </>
+    <Stack gap={3} sx={{ alignSelf: "center" }}>
+      <Block
+        variant="contained"
+        color="primary.main"
+        sx={{ minWidth: 300, width: "fit-content", alignSelf: "center" }}
+        SlotProps={{ childContainer: { "data-mui-color-scheme": "dark" } }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ textAlign: "center", color: "text.primary" }}
+        >
+          Create New Product
+        </Typography>
+      </Block>
+
+      <Block sx={{ minWidth: 0.5, width: "fit-content", alignSelf: "center" }}>
+        <ProductForm />
+      </Block>
+    </Stack>
   );
 }
