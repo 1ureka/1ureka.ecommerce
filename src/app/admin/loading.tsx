@@ -1,9 +1,9 @@
-import { Loader2 } from "lucide-react";
+import { Box, CircularProgress } from "@mui/material";
 
 export default function Loading() {
   return (
-    <div className="flex justify-center">
-      <Loader2 className="size-24 animate-spin" />
-    </div>
+    <Box sx={{ alignSelf: "center", justifySelf: "center" }}>
+      <CircularProgress />
+    </Box>
   );
 }
