@@ -3,6 +3,7 @@ import "server-only";
 import { Box, Divider, Typography } from "@mui/material";
 import { Dock, DockItem } from "./display/Wrapper";
 import NavLink from "./input/NavLink";
+import ThemeToggle from "./input/ThemeToggle";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
@@ -72,6 +73,10 @@ export function UserDocker() {
             <AdminPanelSettingsRoundedIcon fontSize="small" />
           </NavLink>
         </DockItem>
+
+        <DockItem title="Theme">
+          <ThemeToggle />
+        </DockItem>
       </Dock>
     </Warpper>
   );
@@ -123,6 +128,10 @@ export function AdminDocker() {
           <NavLink href={"/"}>
             <HomeRoundedIcon fontSize="small" />
           </NavLink>
+        </DockItem>
+
+        <DockItem title="Theme">
+          <ThemeToggle />
         </DockItem>
       </Dock>
     </Warpper>
