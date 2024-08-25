@@ -1,9 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Card, CardContent, CardDescription } from "@/components/ui/card";
-
 import { userOrderExists } from "@/lib/actions";
 import { formatCurrency } from "@/lib/formatters";
 import type { Product } from "@prisma/client";
@@ -14,7 +10,7 @@ import { Elements, PaymentElement } from "@stripe/react-stripe-js";
 import { LinkAuthenticationElement } from "@stripe/react-stripe-js";
 
 import { useState } from "react";
-import Image from "next/image";
+import { Button, Stack, Typography } from "@mui/material";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY as string
@@ -28,32 +24,9 @@ export default function CheckoutForm({
   clientSecret: string;
 }) {
   return (
-    <div className="max-w-5xl w-full mx-auto space-y-8">
-      <div className="flex gap-4 items-center">
-        <div className="flex-shrink aspect-video w-1/3 relative">
-          <Image
-            src={`/${product.imagePath}`}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
-        </div>
-
-        <div>
-          <div className="text-lg">
-            {formatCurrency(product.priceInCents / 100)}
-          </div>
-          <h1 className="text-2xl font-bold">{product.name}</h1>
-          <div className="line-clamp-3 text-muted-foreground">
-            {product.description}
-          </div>
-        </div>
-      </div>
-
-      <Elements options={{ clientSecret }} stripe={stripePromise}>
-        <Form priceInCents={product.priceInCents} id={product.id} />
-      </Elements>
-    </div>
+    <Elements options={{ clientSecret }} stripe={stripePromise}>
+      <Form priceInCents={product.priceInCents} id={product.id} />
+    </Elements>
   );
 }
 
@@ -103,38 +76,32 @@ function Form({ priceInCents, id }: { priceInCents: number; id: string }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Checkout</CardTitle>
-          {error && (
-            <CardDescription className="text-destructive">
-              {error}
-            </CardDescription>
-          )}
-        </CardHeader>
+    <Stack gap={2} component="form" onSubmit={handleSubmit}>
+      <Stack gap={1}>
+        <Typography variant="h6">Checkout</Typography>
+        {error && <Typography color="error">{error}</Typography>}
+      </Stack>
 
-        <CardContent className="space-y-4">
-          <PaymentElement />
-          <LinkAuthenticationElement
-            onChange={(e) => {
-              setEmail(e.value.email);
-            }}
-          />
-        </CardContent>
+      <Stack gap={1}>
+        <PaymentElement />
+        <LinkAuthenticationElement
+          onChange={(e) => {
+            setEmail(e.value.email);
+          }}
+        />
+      </Stack>
 
-        <CardFooter>
-          <Button
-            className="w-full"
-            size="lg"
-            disabled={!stripe || !elements || loading}
-          >
-            {loading
-              ? "Processing..."
-              : `Purchase - $${formatCurrency(priceInCents / 100)}`}
-          </Button>
-        </CardFooter>
-      </Card>
-    </form>
+      <Button
+        variant="contained"
+        sx={{ width: 1 }}
+        size="large"
+        disabled={!stripe || !elements || loading}
+        type="submit"
+      >
+        {loading
+          ? "Processing..."
+          : `Purchase - $${formatCurrency(priceInCents / 100)}`}
+      </Button>
+    </Stack>
   );
 }
