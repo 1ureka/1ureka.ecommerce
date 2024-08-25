@@ -9,31 +9,9 @@ import {
 } from "@react-email/components";
 import OrderInfo from "./components/OrderInfo";
 import type { Order, Product, DownloadVerification } from "@prisma/client";
+import { purchaseReceiptEmailPreviewData } from "./previewData";
 
-PurchaseReceiptEmail.PreviewProps = {
-  email: "test@gmail.com",
-  product: {
-    id: "1",
-    name: "Image 01",
-    priceInCents: 1000,
-    filePath: "path/to/file",
-    imagePath:
-      "products/dc873dc3-b4dd-419b-bdc0-c37c4f87ff2b-2016-04-17_13.20.11.png",
-    description: "Description",
-    isAvailableForPurchase: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  order: {
-    id: crypto.randomUUID(),
-    userId: crypto.randomUUID(),
-    productId: "1",
-    pricePaidInCents: 1000,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  downloadId: crypto.randomUUID(),
-};
+PurchaseReceiptEmail.PreviewProps = purchaseReceiptEmailPreviewData;
 
 export default function PurchaseReceiptEmail({
   email,
