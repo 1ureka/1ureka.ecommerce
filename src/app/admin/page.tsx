@@ -1,16 +1,21 @@
+import ToolSection from "@/components/(admin)/ToolSection";
 import Block from "@/components/Block";
-import { getSalesData, getCustomerData, getProductData } from "@/data/table";
-import { formatCurrency, formatNumber } from "@/lib/formatters";
 import { Box, Stack, Typography } from "@mui/material";
+
+import { getSalesData, getCustomerData } from "@/data/table";
+import { getProductData, getExpiredDownloads } from "@/data/table";
+import { formatCurrency, formatNumber } from "@/lib/formatters";
 
 export default async function Page() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
-  const [salesData, customerData, productData] = await Promise.all([
-    getSalesData(),
-    getCustomerData(),
-    getProductData(),
-  ]);
+  const [salesData, customerData, productData, expiredDownloadLinks] =
+    await Promise.all([
+      getSalesData(),
+      getCustomerData(),
+      getProductData(),
+      getExpiredDownloads(),
+    ]);
 
   const { amount, numberOfSales } = salesData;
   const { averageOrderValue, numberOfCustomers } = customerData;
@@ -60,6 +65,14 @@ export default async function Page() {
           SlotProps={{ childContainer: { "data-mui-color-scheme": "dark" } }}
         >
           <p>{formatNumber(numberOfActive)}</p>
+        </DashboardCard>
+
+        <DashboardCard
+          decoration="left"
+          title="Tools"
+          description="A section for additional and supplementary features."
+        >
+          <ToolSection expiredDownloadLinks={expiredDownloadLinks} />
         </DashboardCard>
       </Box>
     </Box>
