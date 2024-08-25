@@ -1,13 +1,24 @@
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Block from "@/components/Block";
+import { Button, Stack, Typography } from "@mui/material";
 
 export default function Expired() {
   return (
-    <>
-      <h1 className="text-4xl mb-4">Download link expired</h1>
-      <Button asChild size="lg">
-        <Link href="/orders">Get New Link</Link>
-      </Button>
-    </>
+    <Block
+      sx={{ alignSelf: "center", justifySelf: "center", width: "fit-content" }}
+    >
+      <Stack gap={2}>
+        <Typography variant="h6">Download link expired</Typography>
+        <Button
+          size="large"
+          component={Link}
+          href="/orders"
+          fullWidth
+          variant="contained"
+        >
+          Get New Link
+        </Button>
+      </Stack>
+    </Block>
   );
 }
