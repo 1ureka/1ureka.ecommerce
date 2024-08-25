@@ -1,6 +1,7 @@
 import Block from "@/components/Block";
-import { Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
 import { ProductsSection } from "@/components/(user)/ProductsSection";
 
 export default function Page() {
@@ -39,6 +40,19 @@ export default function Page() {
       </Stack>
 
       <ProductsSection />
+
+      <Stack alignItems="center" sx={{ py: 2 }}>
+        <Block>
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<RefreshRoundedIcon />}
+            size="large"
+          >
+            Load More
+          </Button>
+        </Block>
+      </Stack>
     </Stack>
   );
 }
