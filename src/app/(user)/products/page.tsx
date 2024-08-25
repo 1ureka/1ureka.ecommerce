@@ -56,3 +56,5 @@ export default function Page() {
     </Stack>
   );
 }
+
+export const dynamic = "force-dynamic";
