@@ -2,11 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { deleteProduct, toggleAvailability } from "@/lib/actions";
-import { useRouter } from "next/navigation";
+import { createDownloadLink } from "@/lib/actions";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
-import Link from "next/link";
 
 export default function ProductActions({
   id,
@@ -37,6 +38,7 @@ export default function ProductActions({
         <MenuItem component={Link} href={`/admin/products/${id}/edit`}>
           Edit
         </MenuItem>
+        <DownloadButton id={id} />
         <Divider />
         <DeleteButton id={id} disabled={disabled} />
       </Menu>
@@ -89,6 +91,25 @@ function DeleteButton({ id, disabled }: { id: string; disabled: boolean }) {
       }}
     >
       {isPedding ? "Loading..." : "Delete"}
+    </MenuItem>
+  );
+}
+
+function DownloadButton({ id }: { id: string }) {
+  const [isPedding, startTransition] = useTransition();
+
+  const handleClick = () => {
+    startTransition(async () => {
+      const downloadId = await createDownloadLink(id);
+      const a = document.createElement("a");
+      a.href = `/products/download/${downloadId}`;
+      a.click();
+    });
+  };
+
+  return (
+    <MenuItem disabled={isPedding} onClick={handleClick}>
+      {isPedding ? "Loading..." : "Download"}
     </MenuItem>
   );
 }
