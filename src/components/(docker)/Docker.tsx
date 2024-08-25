@@ -105,12 +105,12 @@ export function AdminDocker() {
             <Inventory2RoundedIcon fontSize="small" />
           </NavLink>
         </DockItem>
-        <DockItem title="Order">
+        <DockItem title="Orders">
           <NavLink href={"/admin/orders"}>
             <LocalShippingRoundedIcon fontSize="small" />
           </NavLink>
         </DockItem>
-        <DockItem title="Sales">
+        <DockItem title="Customer">
           <NavLink href={"/admin/users"}>
             <SellRoundedIcon fontSize="small" />
           </NavLink>
