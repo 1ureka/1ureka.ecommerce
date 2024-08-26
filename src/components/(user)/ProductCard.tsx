@@ -72,7 +72,7 @@ export function ProductCard({
 
       <Typography
         sx={{ flexGrow: 1 }}
-        className={isEllipsis ? "text-ellipsis" : ""}
+        className={isEllipsis ? "text-ellipsis" : "text-ellipsis-6"}
       >
         {description}
       </Typography>

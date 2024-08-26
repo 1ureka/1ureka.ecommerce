@@ -19,7 +19,7 @@ export default function Page() {
         </Typography>
       </Block>
 
-      <Block sx={{ minWidth: 0.5, width: "fit-content", alignSelf: "center" }}>
+      <Block sx={{ minWidth: 600, width: "fit-content", alignSelf: "center" }}>
         <ProductForm />
       </Block>
     </Stack>

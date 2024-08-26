@@ -21,3 +21,12 @@ body {
   display: -webkit-box;
   -webkit-box-orient: vertical;
 }
+
+.text-ellipsis-6 {
+  white-space: pre-wrap;
+  text-wrap: pretty;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
