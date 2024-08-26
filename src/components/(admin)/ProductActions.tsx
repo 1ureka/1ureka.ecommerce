@@ -38,7 +38,9 @@ export default function ProductActions({
         <MenuItem component={Link} href={`/admin/products/${id}/edit`}>
           Edit
         </MenuItem>
-        <DownloadButton id={id} />
+        <MenuItem component={Link} href={`/admin/products/${id}/download`}>
+          Download
+        </MenuItem>
         <Divider />
         <DeleteButton id={id} disabled={disabled} />
       </Menu>
@@ -91,25 +93,6 @@ function DeleteButton({ id, disabled }: { id: string; disabled: boolean }) {
       }}
     >
       {isPedding ? "Loading..." : "Delete"}
-    </MenuItem>
-  );
-}
-
-function DownloadButton({ id }: { id: string }) {
-  const [isPedding, startTransition] = useTransition();
-
-  const handleClick = () => {
-    startTransition(async () => {
-      const downloadId = await createDownloadLink(id);
-      const a = document.createElement("a");
-      a.href = `/products/download/${downloadId}`;
-      a.click();
-    });
-  };
-
-  return (
-    <MenuItem disabled={isPedding} onClick={handleClick}>
-      {isPedding ? "Loading..." : "Download"}
     </MenuItem>
   );
 }
