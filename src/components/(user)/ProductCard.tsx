@@ -70,12 +70,13 @@ export function ProductCard({
         />
       </Stack>
 
-      <Typography
-        sx={{ flexGrow: 1 }}
-        className={isEllipsis ? "text-ellipsis" : "text-ellipsis-6"}
-      >
-        {description}
-      </Typography>
+      <Box sx={{ flexGrow: 1 }}>
+        <Typography
+          className={isEllipsis ? "text-ellipsis" : "text-ellipsis-6"}
+        >
+          {description}
+        </Typography>
+      </Box>
 
       <Button
         sx={{ width: 1 }}
