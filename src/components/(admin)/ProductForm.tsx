@@ -12,8 +12,89 @@ import { Chip, styled, TextField } from "@mui/material";
 import CloudUploadRoundedIcon from "@mui/icons-material/CloudUploadRounded";
 import AddPhotoAlternateRoundedIcon from "@mui/icons-material/AddPhotoAlternateRounded";
 
+type DefaultValue = {
+  name?: string;
+  priceInCents?: number;
+  description?: string;
+};
+
+const generateTest = () => {
+  const prefix = [
+    "Tutorial",
+    "Course",
+    "Workshop",
+    "Bootcamp",
+    "Collection",
+    "Album",
+  ];
+
+  const serial = crypto
+    .getRandomValues(new Uint32Array(1))[0]
+    .toString(36)
+    .slice(-4);
+
+  const suffix = [
+    "for Beginners",
+    "for Intermediate",
+    "for Advanced",
+    "for Experts",
+    "for Professionals",
+  ];
+
+  const random = (arr: string[]) => arr[Math.floor(Math.random() * arr.length)];
+
+  const name = `${random(prefix)} ${serial} ${random(suffix)}`;
+  const priceInCents = Math.floor(Math.random() * 10000);
+
+  const desSuffix =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc. Nullam nec nunc nec nunc ultricies nunc id, ultricies nunc.";
+  const description =
+    `This is a ${name} that costs ${formatCurrency(priceInCents / 100)}. ` +
+    desSuffix;
+
+  return { name, priceInCents, description };
+};
+
 export default function ProductForm({ product }: { product?: Product | null }) {
-  const [price, setPrice] = useState<number | undefined>(product?.priceInCents);
+  const [defaultValues, setDefault] = useState<DefaultValue>({
+    name: product?.name,
+    priceInCents: product?.priceInCents,
+    description: product?.description,
+  });
+
+  if (product) return <Form product={product} defaultValues={defaultValues} />;
+
+  return (
+    <Stack gap={1.5}>
+      {!product && (
+        <Button
+          fullWidth
+          variant="outlined"
+          onClick={() => {
+            setDefault(generateTest());
+          }}
+        >
+          Generate Test Data
+        </Button>
+      )}
+
+      <Form
+        product={product}
+        defaultValues={defaultValues}
+        key={JSON.stringify(defaultValues)}
+      />
+    </Stack>
+  );
+}
+
+function Form({
+  product,
+  defaultValues: { name, priceInCents, description },
+}: {
+  product?: Product | null;
+  defaultValues: DefaultValue;
+}) {
+  const [price, setPrice] = useState<number | undefined>(priceInCents);
   const [formState, action] = useFormState(
     !product ? addProduct : editProduct.bind(null, product.id),
     { error: "", fieldError: {} }
@@ -31,7 +112,7 @@ export default function ProductForm({ product }: { product?: Product | null }) {
         label="Name"
         name="name"
         required
-        defaultValue={product?.name}
+        defaultValue={name}
         error={Boolean(formState?.fieldError?.name)}
         helperText={formState?.fieldError?.name}
       />
@@ -70,7 +151,7 @@ export default function ProductForm({ product }: { product?: Product | null }) {
         required
         multiline
         rows={4}
-        defaultValue={product?.description}
+        defaultValue={description}
         error={Boolean(formState?.fieldError?.description)}
         helperText={formState?.fieldError?.description}
       />
