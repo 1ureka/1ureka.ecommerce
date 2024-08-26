@@ -1,15 +1,19 @@
 "use client";
 
 import Block from "@/components/Block";
-import { sendOrdersHistory } from "@/lib/actions";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
 import { Button, Stack, TextField, Typography } from "@mui/material";
+import { sendOrdersHistory } from "@/lib/actions";
 import { useFormState, useFormStatus } from "react-dom";
 
-export default function OrdersPage() {
+export default function Page() {
   const [data, action] = useFormState(sendOrdersHistory, {});
 
   return (
-    <Stack
+    <StackM
+      {...createMotionProps()}
       gap={3}
       alignItems="center"
       sx={{ alignSelf: "center", justifySelf: "center", width: "fit-content" }}
@@ -54,7 +58,7 @@ export default function OrdersPage() {
           </Stack>
         </form>
       </Block>
-    </Stack>
+    </StackM>
   );
 }
 

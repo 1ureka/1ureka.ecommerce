@@ -1,12 +1,15 @@
-import Block from "@/components/Block";
 import { Button, Stack, Typography } from "@mui/material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import RefreshRoundedIcon from "@mui/icons-material/RefreshRounded";
+
+import Block from "@/components/Block";
 import { ProductsSection } from "@/components/(user)/ProductsSection";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
 
 export default function Page() {
   return (
-    <Stack gap={4}>
+    <StackM {...createMotionProps()} gap={4}>
       <Stack direction="row" alignItems="stretch" gap={4}>
         <Block
           variant="contained"
@@ -53,7 +56,7 @@ export default function Page() {
           </Button>
         </Block>
       </Stack>
-    </Stack>
+    </StackM>
   );
 }
 

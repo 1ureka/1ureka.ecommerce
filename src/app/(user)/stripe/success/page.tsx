@@ -6,7 +6,10 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+
 import Block from "@/components/Block";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -32,7 +35,7 @@ export default async function PaymentSuccessPage({
   const isSuccess = paymentIntent.status === "succeeded";
 
   return (
-    <Stack gap={3}>
+    <StackM {...createMotionProps()} gap={3}>
       <Block
         variant="contained"
         color="primary.main"
@@ -90,6 +93,6 @@ export default async function PaymentSuccessPage({
           </Stack>
         </Block>
       </Stack>
-    </Stack>
+    </StackM>
   );
 }

@@ -8,6 +8,9 @@ import Block from "@/components/Block";
 import CheckoutForm from "@/components/(user)/CheckoutForm";
 import { Box, Stack, Typography } from "@mui/material";
 
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 const GAP = 4;
 
@@ -33,7 +36,7 @@ export default async function PurchasePage({
   }
 
   return (
-    <Stack gap={GAP} sx={{ alignSelf: "center" }}>
+    <StackM {...createMotionProps()} gap={GAP} sx={{ alignSelf: "center" }}>
       <Stack gap={GAP / 2} direction="row">
         <Block
           decoration="none"
@@ -77,6 +80,6 @@ export default async function PurchasePage({
           product={product}
         />
       </Block>
-    </Stack>
+    </StackM>
   );
 }

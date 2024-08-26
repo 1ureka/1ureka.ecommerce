@@ -1,11 +1,14 @@
 import Block from "@/components/Block";
-import { Box, Stack, Typography } from "@mui/material";
 import { PopularSection } from "@/components/(user)/IndexSections";
 import { NewestSection } from "@/components/(user)/IndexSections";
 
+import { Box, Typography } from "@mui/material";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
 export default async function Page() {
   return (
-    <Stack gap={6}>
+    <StackM {...createMotionProps()} gap={6}>
       <Box sx={{ display: "grid", placeItems: "center" }}>
         <Block sx={{ width: "fit-content", textAlign: "center" }}>
           <Typography variant="h4">Welcome to our store!</Typography>
@@ -18,6 +21,6 @@ export default async function Page() {
 
       <PopularSection />
       <NewestSection />
-    </Stack>
+    </StackM>
   );
 }
