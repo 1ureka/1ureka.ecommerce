@@ -11,8 +11,8 @@ import { CssBaseline } from "@mui/material";
 
 import { theme } from "@/lib/theme";
 import { ViewTransitions } from "next-view-transitions";
-import "../styles/globals.css";
-import "../styles/page-transition.css";
+import "../style/globals.css";
+import "../style/page-transition.css";
 
 export default function RootLayout({
   children,
