@@ -1,7 +1,6 @@
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 import { getProductTable } from "@/data/table";
 
-import Link from "next/link";
 import { Box, Button, Typography, Table } from "@mui/material";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
@@ -11,6 +10,7 @@ import Block from "@/components/Block";
 import ProductActions from "@/components/(admin)/ProductActions";
 import { StackM } from "@/components/Motion";
 import { createMotionProps } from "@/components/MotionProps";
+import { Link } from "next-view-transitions";
 
 export default function Page() {
   return (

@@ -3,10 +3,10 @@ import "server-only";
 import { formatCurrency } from "@/lib/formatters";
 import type { Product } from "@prisma/client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { Box, Button, Skeleton, Stack, Typography } from "@mui/material";
 import { Alert, Chip } from "@mui/material";
+import { Link } from "next-view-transitions";
 
 const GAP = 1.5;
 

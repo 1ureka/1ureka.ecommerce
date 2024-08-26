@@ -1,6 +1,6 @@
 import { IconButton, type IconButtonProps } from "@mui/material";
 import ActiveWrapper from "./ActiveWrapper";
-import Link from "next/link";
+import { Link } from "next-view-transitions";
 
 export default function NavLink({
   href,

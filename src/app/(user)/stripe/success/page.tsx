@@ -5,11 +5,11 @@ import Stripe from "stripe";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
 
 import Block from "@/components/Block";
 import { StackM } from "@/components/Motion";
 import { createMotionProps } from "@/components/MotionProps";
+import { Link } from "next-view-transitions";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 

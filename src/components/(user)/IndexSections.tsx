@@ -5,7 +5,6 @@ import KeyboardArrowRightRoundedIcon from "@mui/icons-material/KeyboardArrowRigh
 import NewReleasesRoundedIcon from "@mui/icons-material/NewReleasesRounded";
 import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 
-import Link from "next/link";
 import { cache } from "@/lib/cache";
 import { getProducts } from "@/data/table";
 
@@ -13,6 +12,7 @@ import Block from "../Block";
 import { ProductCard } from "./ProductCard";
 import { ProductCardSkeleton } from "./ProductCard";
 import { Suspense } from "react";
+import { Link } from "next-view-transitions";
 
 const GAP = 4;
 const decorationMap = ["left", "none", "right", "none", "right"] as const;

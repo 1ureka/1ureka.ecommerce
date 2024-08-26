@@ -2,12 +2,11 @@
 
 import { useState, useTransition } from "react";
 import { deleteProduct, toggleAvailability } from "@/lib/actions";
-import { createDownloadLink } from "@/lib/actions";
 
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertRoundedIcon from "@mui/icons-material/MoreVertRounded";
+import { Link } from "next-view-transitions";
 
 export default function ProductActions({
   id,
