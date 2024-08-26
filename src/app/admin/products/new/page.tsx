@@ -1,10 +1,13 @@
-import { Stack, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import Block from "@/components/Block";
 import ProductForm from "@/components/(admin)/ProductForm";
 
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
 export default function Page() {
   return (
-    <Stack gap={3} sx={{ alignSelf: "center" }}>
+    <StackM {...createMotionProps()} gap={3} sx={{ alignSelf: "center" }}>
       <Block
         variant="contained"
         color="primary.main"
@@ -22,6 +25,6 @@ export default function Page() {
       <Block sx={{ minWidth: 600, width: "fit-content", alignSelf: "center" }}>
         <ProductForm />
       </Block>
-    </Stack>
+    </StackM>
   );
 }

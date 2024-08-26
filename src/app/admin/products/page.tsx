@@ -2,17 +2,19 @@ import { formatCurrency, formatNumber } from "@/lib/formatters";
 import { getProductTable } from "@/data/table";
 
 import Link from "next/link";
-import { Box, Button, Stack, Typography, Table } from "@mui/material";
+import { Box, Button, Typography, Table } from "@mui/material";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
 import CancelRoundedIcon from "@mui/icons-material/CancelRounded";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 
 import Block from "@/components/Block";
 import ProductActions from "@/components/(admin)/ProductActions";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
 
 export default function Page() {
   return (
-    <Stack gap={3}>
+    <StackM {...createMotionProps()} gap={3}>
       <Block
         variant="contained"
         color="primary.main"
@@ -40,7 +42,7 @@ export default function Page() {
       <Block>
         <ProductTable />
       </Block>
-    </Stack>
+    </StackM>
   );
 }
 

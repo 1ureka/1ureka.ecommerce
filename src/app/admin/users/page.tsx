@@ -1,14 +1,17 @@
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 import { getUsers } from "@/data/table";
 
-import { Stack, Table, Typography } from "@mui/material";
+import { Table, Typography } from "@mui/material";
 import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+
 import Block from "@/components/Block";
 import UserActions from "@/components/(admin)/UserActions";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
 
 export default function Page() {
   return (
-    <Stack gap={3}>
+    <StackM {...createMotionProps()} gap={3}>
       <Block
         variant="contained"
         color="primary.main"
@@ -26,7 +29,7 @@ export default function Page() {
       <Block>
         <UserTable />
       </Block>
-    </Stack>
+    </StackM>
   );
 }
 

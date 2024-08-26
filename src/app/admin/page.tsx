@@ -6,6 +6,9 @@ import { getSalesData, getCustomerData } from "@/data/table";
 import { getProductData, getExpiredDownloads } from "@/data/table";
 import { formatCurrency, formatNumber } from "@/lib/formatters";
 
+import { BoxM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
 export default async function Page() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -22,7 +25,7 @@ export default async function Page() {
   const { numberOfActive, numberOfInactive } = productData;
 
   return (
-    <Box>
+    <BoxM {...createMotionProps()}>
       <Block sx={{ minWidth: 300, width: "fit-content", mb: 4, mx: "auto" }}>
         <Typography variant="h5" sx={{ textAlign: "center" }}>
           Overview
@@ -75,7 +78,7 @@ export default async function Page() {
           <ToolSection expiredDownloadLinks={expiredDownloadLinks} />
         </DashboardCard>
       </Box>
-    </Box>
+    </BoxM>
   );
 }
 
