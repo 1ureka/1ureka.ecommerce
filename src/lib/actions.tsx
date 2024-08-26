@@ -176,10 +176,6 @@ export async function deleteUser(id: string) {
 }
 
 // DownloadLink actions
-export async function createDownloadLink(productId: string) {
-  return createDownloadId(productId);
-}
-
 export async function deleteExpiredDownloadLinks() {
   return removeExpiredDownloads();
 }
