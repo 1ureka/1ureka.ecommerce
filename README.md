@@ -1,4 +1,4 @@
-# E-commerce Demo
+# 1ureka.ecommerce
 
 This project is a demo e-commerce application built with Next.js, Prisma, Stripe, and MUI. It showcases a simple integration of various technologies to create a functional online store.
 
