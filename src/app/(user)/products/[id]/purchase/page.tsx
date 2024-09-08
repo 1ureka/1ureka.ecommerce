@@ -53,7 +53,7 @@ export default async function PurchasePage({
             }}
           >
             <Image
-              src={`/${product.imagePath}`}
+              src={`${product.imagePath}`}
               alt={product.name}
               fill
               style={{ objectFit: "cover" }}

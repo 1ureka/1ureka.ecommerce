@@ -143,26 +143,13 @@ export async function createProduct(
   }
 ) {
   try {
-    await fs.mkdir("private/products", { recursive: true });
-    const filePath = `private/products/${crypto.randomUUID()}-${
-      data.file.name
-    }`;
-    await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
-
-    await fs.mkdir("public/products", { recursive: true });
-    const imagePath = `products/${crypto.randomUUID()}-${data.image.name}`;
-    await fs.writeFile(
-      `public/${imagePath}`,
-      Buffer.from(await data.image.arrayBuffer())
-    );
-
     return db.product.create({
       data: {
         name: data.name,
         priceInCents: data.priceInCents,
         description: data.description,
-        filePath,
-        imagePath,
+        filePath: "/api/image/1920/1080",
+        imagePath: "/api/image/1920/1080",
         isAvailableForPurchase: false,
       },
     });
@@ -175,56 +162,14 @@ export async function updateProduct(
   id: string,
   data: Partial<Product> & { file?: File; image?: File }
 ) {
-  const product = await getProduct(id);
-
-  if (!product) {
-    throw new Error("Product not found");
-  }
-
-  let filePath = product.filePath;
-  let imagePath = product.imagePath;
-  try {
-    if (data.file && data.file.size > 0) {
-      await fs.unlink(product.filePath);
-      filePath = `private/products/${crypto.randomUUID()}-${data.file.name}`;
-      await fs.writeFile(filePath, Buffer.from(await data.file.arrayBuffer()));
-    }
-
-    if (data.image && data.image.size > 0) {
-      await fs.unlink(`public/${product.imagePath}`);
-      imagePath = `products/${crypto.randomUUID()}-${data.image.name}`;
-      await fs.writeFile(
-        `public/${imagePath}`,
-        Buffer.from(await data.image.arrayBuffer())
-      );
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      throw new Error(error.message);
-    }
-    throw new Error("Something went wrong");
-  }
-
-  delete data.file;
-  delete data.image;
-
   return db.product.update({
     where: { id },
-    data: { ...data, filePath, imagePath },
+    data: { ...data },
   });
 }
 
 export async function removeProduct(id: string) {
-  const data = await db.product.delete({ where: { id } });
-
-  if (data) {
-    await Promise.all([
-      fs.unlink(data.filePath),
-      fs.unlink(`public/${data.imagePath}`),
-    ]);
-  }
-
-  return data;
+  return db.product.delete({ where: { id } });
 }
 
 export async function removeUser(id: string) {

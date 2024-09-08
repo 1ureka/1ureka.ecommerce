@@ -52,7 +52,7 @@ export function ProductCard({
 
       <CardMedia>
         <Image
-          src={`/${imagePath}`}
+          src={`${imagePath}`}
           alt={name}
           fill
           style={{ objectFit: "cover" }}

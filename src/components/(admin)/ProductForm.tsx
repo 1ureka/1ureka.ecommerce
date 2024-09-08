@@ -212,7 +212,7 @@ function Form({
                 overflow: "hidden",
               }}
             >
-              <Image src={`/${product.imagePath}`} alt={product.name} fill />
+              <Image src={`${product.imagePath}`} alt={product.name} fill />
             </Box>
           )}
 
