@@ -5,6 +5,7 @@ This project is a demo e-commerce application built with Next.js, Prisma, Stripe
 ## Table of Contents
 
 - [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
 - [Scripts](#scripts)
 - [Tech Stack](#tech-stack)
 
@@ -17,6 +18,56 @@ git clone [repository-url]
 cd ecommerce-demo
 npm install
 ```
+
+## Environment Variables
+
+Before running `npm dev:next`, you need to set up the following environment variables. Create a `.env` file in the root directory of the project and add the variables as shown below:
+
+```dotenv
+# Database
+DATABASE_URL=your_postgres_connection_string
+
+# Admin Credentials
+ADMIN_USERNAME=your_admin_username
+ADMIN_PASSWORD=your_hashed_admin_password
+
+# Stripe
+STRIPE_SECRET_KEY=your_stripe_secret_key
+NEXT_PUBLIC_STRIPE_PUBLIC_KEY=your_stripe_public_key
+STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+
+# Resend API
+RESEND_API_KEY=your_resend_api_key
+```
+
+- **DATABASE_URL**: The connection string for your PostgreSQL database (version 16 or above).
+
+- **ADMIN_USERNAME** and **ADMIN_PASSWORD**: Credentials for accessing the admin page.
+
+  - **ADMIN_USERNAME**: Set this to your desired admin username.
+  - **ADMIN_PASSWORD**: This needs to be a hashed version of your password. Use the following function to hash your password:
+
+    ```javascript
+    async function hashPassword(password) {
+      const arrayBuffer = await crypto.subtle.digest(
+        "SHA-512",
+        new TextEncoder().encode(password)
+      );
+      return Buffer.from(arrayBuffer).toString("base64");
+    }
+    ```
+
+    To hash your password:
+
+    1. Save the above function in a JavaScript file.
+    2. Call `hashPassword('your_plain_text_password')`.
+    3. Use the resulting hashed string as the value for `ADMIN_PASSWORD`.
+
+- **STRIPE_SECRET_KEY** and **NEXT_PUBLIC_STRIPE_PUBLIC_KEY**: Your Stripe API keys, obtainable from your [Stripe dashboard](https://dashboard.stripe.com/apikeys).
+
+- **STRIPE_WEBHOOK_SECRET**: Running `npm run dev:stripe`, copy the webhook secret displayed in the terminal and set it as this variable.
+
+- **RESEND_API_KEY**: Your API key from the [Resend dashboard](https://resend.com/api-keys).
 
 ## Scripts
 
