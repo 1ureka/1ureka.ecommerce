@@ -71,18 +71,21 @@ export async function getProducts(
       return db.product.findMany({
         where: { isAvailableForPurchase: true },
         orderBy: { orders: { _count: "desc" } },
-        take: take ?? 6,
+        include: { orders: true },
+        take: take ?? 5,
       });
     case "newest":
       return db.product.findMany({
         where: { isAvailableForPurchase: true },
         orderBy: { createdAt: "desc" },
-        take: take ?? 6,
+        include: { orders: true },
+        take: take ?? 5,
       });
     case "all":
       return db.product.findMany({
         where: { isAvailableForPurchase: true },
         orderBy: { name: "asc" },
+        include: { orders: true },
       });
   }
 }
@@ -91,6 +94,12 @@ export async function getDownload(id: string) {
   return db.downloadVerification.findUnique({
     where: { id, expiresAt: { gt: new Date() } },
     select: { product: { select: { filePath: true, name: true } } },
+  });
+}
+
+export async function getExpiredDownloads() {
+  return db.downloadVerification.count({
+    where: { expiresAt: { lt: new Date() } },
   });
 }
 
@@ -224,6 +233,12 @@ export async function removeUser(id: string) {
 
 export async function removeOrder(id: string) {
   return db.order.delete({ where: { id } });
+}
+
+export async function removeExpiredDownloads() {
+  return db.downloadVerification.deleteMany({
+    where: { expiresAt: { lt: new Date() } },
+  });
 }
 
 export async function checkOrder(email: string, productId: string) {

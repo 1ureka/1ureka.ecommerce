@@ -1,23 +1,35 @@
 import { formatCurrency, formatNumber } from "@/lib/formatters";
-
-import { Table, TableBody, TableCell } from "@/components/ui/table";
-import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
-import PageHeader from "@/components/(admin)/PageHeader";
-import UserActions from "@/components/(admin)/UserActions";
-
-import { MoreVertical } from "lucide-react";
 import { getUsers } from "@/data/table";
 
-export default function UsersPage() {
+import { Table, Typography } from "@mui/material";
+import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+
+import Block from "@/components/Block";
+import UserActions from "@/components/(admin)/UserActions";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
+export default function Page() {
   return (
-    <>
-      <PageHeader>Customers</PageHeader>
-      <UserTable />
-    </>
+    <StackM {...createMotionProps()} gap={3}>
+      <Block
+        variant="contained"
+        color="primary.main"
+        sx={{ minWidth: 300, width: "fit-content", alignSelf: "center" }}
+        SlotProps={{ childContainer: { "data-mui-color-scheme": "dark" } }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ textAlign: "center", color: "text.primary" }}
+        >
+          Customers
+        </Typography>
+      </Block>
+
+      <Block>
+        <UserTable />
+      </Block>
+    </StackM>
   );
 }
 
@@ -28,16 +40,14 @@ async function UserTable() {
 
   return (
     <Table>
-      <TableHeader>
+      <TableHead>
         <TableRow>
-          <TableHead>Email</TableHead>
-          <TableHead>Orders</TableHead>
-          <TableHead>Value</TableHead>
-          <TableHead className="w-0">
-            <span className="sr-only">Actions</span>
-          </TableHead>
+          <TableCell>Email</TableCell>
+          <TableCell>Orders</TableCell>
+          <TableCell>Value</TableCell>
+          <TableCell padding="checkbox" align="right" />
         </TableRow>
-      </TableHeader>
+      </TableHead>
 
       <TableBody>
         {users.map((user) => (
@@ -52,16 +62,8 @@ async function UserTable() {
                 ) / 100
               )}
             </TableCell>
-            <TableCell className="text-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <MoreVertical />
-                  <span className="sr-only">Actions</span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <UserActions id={user.id} />
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <TableCell padding="checkbox" align="right">
+              <UserActions id={user.id} />
             </TableCell>
           </TableRow>
         ))}

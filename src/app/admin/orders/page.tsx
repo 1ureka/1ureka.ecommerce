@@ -1,23 +1,35 @@
 import { formatCurrency } from "@/lib/formatters";
-
-import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Table, TableBody, TableCell } from "@/components/ui/table";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
-import { DropdownMenuContent } from "@/components/ui/dropdown-menu";
-import { DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-
-import PageHeader from "@/components/(admin)/PageHeader";
-import OrderActions from "@/components/(admin)/OrderAcitons";
-
-import { MoreVertical } from "lucide-react";
 import { getOrders } from "@/data/table";
 
-export default function OrdersPage() {
+import { Table, Typography } from "@mui/material";
+import { TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import OrderActions from "@/components/(admin)/OrderAcitons";
+
+import Block from "@/components/Block";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+
+export default function Page() {
   return (
-    <>
-      <PageHeader>Sales</PageHeader>
-      <OrdersTable />
-    </>
+    <StackM {...createMotionProps()} gap={3}>
+      <Block
+        variant="contained"
+        color="primary.main"
+        sx={{ minWidth: 300, width: "fit-content", alignSelf: "center" }}
+        SlotProps={{ childContainer: { "data-mui-color-scheme": "dark" } }}
+      >
+        <Typography
+          variant="h5"
+          sx={{ textAlign: "center", color: "text.primary" }}
+        >
+          Orders
+        </Typography>
+      </Block>
+
+      <Block>
+        <OrdersTable />
+      </Block>
+    </StackM>
   );
 }
 
@@ -28,16 +40,14 @@ async function OrdersTable() {
 
   return (
     <Table>
-      <TableHeader>
+      <TableHead>
         <TableRow>
-          <TableHead>Product</TableHead>
-          <TableHead>Customer</TableHead>
-          <TableHead>Price Paid</TableHead>
-          <TableHead className="w-0">
-            <span className="sr-only">Actions</span>
-          </TableHead>
+          <TableCell>Product</TableCell>
+          <TableCell>Customer</TableCell>
+          <TableCell>Price Paid</TableCell>
+          <TableCell padding="checkbox" align="right" />
         </TableRow>
-      </TableHeader>
+      </TableHead>
 
       <TableBody>
         {orders.map((order) => (
@@ -47,16 +57,8 @@ async function OrdersTable() {
             <TableCell>
               {formatCurrency(order.pricePaidInCents / 100)}
             </TableCell>
-            <TableCell className="text-center">
-              <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <MoreVertical />
-                  <span className="sr-only">Actions</span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <OrderActions id={order.id} />
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <TableCell padding="checkbox" align="right">
+              <OrderActions id={order.id} />
             </TableCell>
           </TableRow>
         ))}

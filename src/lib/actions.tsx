@@ -5,6 +5,7 @@ import {
   createDownloadId,
   createProduct,
   getUserOrders,
+  removeExpiredDownloads,
   removeOrder,
   removeProduct,
   removeUser,
@@ -172,4 +173,9 @@ export async function deleteUser(id: string) {
   if (!user) return notFound();
 
   return user;
+}
+
+// DownloadLink actions
+export async function deleteExpiredDownloadLinks() {
+  return removeExpiredDownloads();
 }

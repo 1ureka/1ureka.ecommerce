@@ -1,10 +1,15 @@
-import { Button } from "@/components/ui/button";
 import { createDownloadId, getProduct } from "@/data/table";
 import { formatCurrency } from "@/lib/formatters";
-import Image from "next/image";
-import Link from "next/link";
-import { notFound } from "next/navigation";
 import Stripe from "stripe";
+
+import { Box, Button, Stack, Typography } from "@mui/material";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+
+import Block from "@/components/Block";
+import { StackM } from "@/components/Motion";
+import { createMotionProps } from "@/components/MotionProps";
+import { Link } from "next-view-transitions";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -30,46 +35,64 @@ export default async function PaymentSuccessPage({
   const isSuccess = paymentIntent.status === "succeeded";
 
   return (
-    <div className="max-w-5xl w-full mx-auto space-y-8">
-      {isSuccess ? (
-        <h1 className="text-4xl font-bold">Payment Successful!</h1>
-      ) : (
-        <h1 className="text-4xl font-bold">Payment Failed</h1>
-      )}
+    <StackM {...createMotionProps()} gap={3}>
+      <Block
+        variant="contained"
+        color="primary.main"
+        sx={{ width: "fit-content", alignSelf: "center" }}
+        SlotProps={{ childContainer: { "data-mui-color-scheme": "dark" } }}
+      >
+        <Typography variant="h5" sx={{ color: "text.primary" }}>
+          {isSuccess ? "Payment Successful!" : "Payment Failed"}
+        </Typography>
+      </Block>
 
-      <div className="flex gap-4 items-center">
-        <div className="flex-shrink aspect-video w-1/3 relative">
-          <Image
-            src={`/${product.imagePath}`}
-            alt={product.name}
-            fill
-            className="object-cover"
-          />
-        </div>
+      <Stack gap={2} sx={{ width: "fit-content", alignSelf: "center" }}>
+        <Block>
+          <Box
+            sx={{
+              position: "relative",
+              width: 1,
+              height: "auto",
+              aspectRatio: 16 / 9,
+            }}
+          >
+            <Image
+              src={`/${product.imagePath}`}
+              alt={product.name}
+              fill
+              style={{ objectFit: "cover" }}
+            />
+          </Box>
+        </Block>
 
-        <div>
-          <div className="text-lg">
-            {formatCurrency(product.priceInCents / 100)}
-          </div>
-          <h1 className="text-2xl font-bold">{product.name}</h1>
-          <div className="line-clamp-3 text-muted-foreground">
-            {product.description}
-          </div>
-          <Button className="mt-4" size="lg" asChild>
-            {isSuccess ? (
-              <a
-                href={`/products/download/${await createDownloadId(
-                  product.id
-                )}`}
-              >
-                Download
-              </a>
-            ) : (
-              <Link href={`/products/${product.id}/purchase`}>Try Again</Link>
-            )}
-          </Button>
-        </div>
-      </div>
-    </div>
+        <Block>
+          <Stack gap={1}>
+            <Typography variant="h6">
+              {formatCurrency(product.priceInCents / 100)}
+            </Typography>
+
+            <Typography variant="h5">{product.name}</Typography>
+
+            <Typography variant="body2">{product.description}</Typography>
+
+            <Button
+              variant="contained"
+              size="large"
+              sx={{ mt: 1 }}
+              fullWidth
+              component={Link}
+              href={
+                isSuccess
+                  ? `/products/download/${await createDownloadId(product.id)}`
+                  : `/products/${product.id}/purchase`
+              }
+            >
+              {isSuccess ? "Download" : "Try Again"}
+            </Button>
+          </Stack>
+        </Block>
+      </Stack>
+    </StackM>
   );
 }

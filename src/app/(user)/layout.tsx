@@ -1,14 +1,26 @@
-import { Nav, NavLink } from "@/components/Nav";
+import { UserDocker } from "@/components/(docker)/Docker";
+import { Box, Stack } from "@mui/material";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Nav>
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/products">Products</NavLink>
-        <NavLink href="/orders">My Orders</NavLink>
-      </Nav>
-      <div className="conatainer m-6">{children}</div>
-    </>
+    <Stack
+      sx={{ position: "absolute", inset: 0, bgcolor: "content.layer2" }}
+      direction="row"
+    >
+      <UserDocker />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          height: 1,
+          display: "grid",
+          px: 15,
+          py: 4,
+          overflow: "auto",
+        }}
+      >
+        {children}
+      </Box>
+    </Stack>
   );
 }

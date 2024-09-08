@@ -1,0 +1,32 @@
+body {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  scrollbar-color: gray transparent;
+  scrollbar-width: thin;
+  overflow-wrap: break-word;
+}
+
+.text-ellipsis {
+  white-space: pre-wrap;
+  text-wrap: pretty;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+.text-ellipsis-6 {
+  white-space: pre-wrap;
+  text-wrap: pretty;
+  -webkit-line-clamp: 6;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
